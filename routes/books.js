@@ -10,6 +10,6 @@ router.post('/', auth, upload.single('image'), booksCtrl.createBook)
 router.get('/:id', booksCtrl.getBook)
 router.put('/:id', auth, upload.single('image'),  booksCtrl.updateBook)
 router.delete('/:id', auth, booksCtrl.deleteBook)
-// router.post('/:id/ratings', booksCtrl.addRating)
+router.post('/:id/rating', auth, booksCtrl.addRating)
 
 module.exports = router

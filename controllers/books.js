@@ -153,3 +153,38 @@ exports.updateBook = async (req, res, next) => {
   console.log(body)
 
 }
+
+exports.addRating = async (req, res, next) => {
+  const { userId, rating } = req.body
+  const { id } = req.params
+  console.log(id)
+
+  try {
+    const book = await Book.findById(id)
+    if (!book) {
+      return res.status(400).json({message: 'book not found'})
+    }
+
+    const userMatch = (rating) => rating.userId === userId
+    const index = book.ratings.findIndex(userMatch)
+    if(index === -1){
+      book.ratings.push({userId: userId, grade: rating})
+    } else {
+      book.ratings[index].grade = rating
+    }
+    
+    const totalRatings = book.ratings.length
+    const sumRatings = book.ratings.reduce((total, rating) => total + rating.grade, 0)
+    const averageRating = sumRatings / totalRatings
+    console.log(book.ratings)
+    console.log('total: ', totalRatings)
+    console.log('sum: ', sumRatings)
+    console.log('average: ', averageRating)
+    book.averageRating = averageRating
+
+    await book.save()
+    return res.status(201).json(book)
+  } catch (error) {
+    return res.status(500).json({ error })
+  }
+}
