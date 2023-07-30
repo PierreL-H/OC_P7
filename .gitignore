@@ -2,7 +2,7 @@
 node_modules
 
 #database url and credentials
-configs/db.config.js
+#configs/db.config.js
 
 #images
 images/*
